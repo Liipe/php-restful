@@ -8,19 +8,27 @@ $app->get('/', function() {
 });
 
 $app->get('/guests', function() use ( $app ) {
-	$guests = array(
-		array('id' => 1, 'name' => 'Edy Segura', 'email' => 'edysegura@gmail.com'),
-		array('id' => 2, 'name' => 'Rodrigo Faria', 'email' => 'rll@gmail.com'),
-		array('id' => 3, 'name' => 'Renata Akemi', 'email' => 'renata@akemi.com')
-	);
+	$db = getDB();
+	
+	$guests = array();
+	foreach($db->guests() as $guest) {
+		$guests[] = array(
+			'id' => $guest['id'],
+			'name' => $guest['name'],
+			'email' => $guest['email']
+		);
+	}
 	
 	$app->response()->header('Content-Type', 'application/json');
 	echo json_encode($guests);
 });
 
 $app->post('/guest', function () use ( $app ) {
-	$guest = json_decode($app->request->getBody(), true);
-	$guest['id'] = 10;
+	$db = getDB();
+	
+	$guestToAdd = json_decode($app->request->getBody(), true);
+	$guest = $db->guests->insert($guestToAdd);
+	
 	$app->response->header('Content-Type', 'application/json');
 	echo json_encode($guest);
 });
@@ -41,6 +49,7 @@ function getConnection() {
 function getDB() {
 	$pdo = getConnection();
 	$db = new NotORM($pdo);
+	return $db;
 }
 
 $app->run();
