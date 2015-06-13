@@ -16,6 +16,13 @@ $app->get('/guests', function() use ( $app ) {
 	$app->response()->header('Content-Type', 'application/json');
 	echo json_encode($guests);
 });
-	
+
+$app->post('/guest', function () use ( $app ) {
+	$guest = json_decode($app->request->getBody(), true);
+	$guest['id'] = 10;
+	$app->response->header('Content-Type', 'application/json');
+	echo json_encode($guest);
+});
+
 $app->run();
 ?>
