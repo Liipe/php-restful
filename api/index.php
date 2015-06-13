@@ -29,5 +29,19 @@ $app->delete('/guest/:id', function($id) use ( $app ) {
 	echo $id;
 });
 
+function getConnection() {
+	$dbhost = getenv('IP');
+	$dbuser = getenv('C9_USER');
+	$dbpass = '';
+	$dbname = 'c9';
+	$pdo = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
+	return $pdo;
+}
+
+function getDB() {
+	$pdo = getConnection();
+	$db = new NotORM($pdo);
+}
+
 $app->run();
 ?>
