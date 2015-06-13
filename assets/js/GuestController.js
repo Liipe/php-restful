@@ -12,6 +12,18 @@ var GuestController = {
 			//it is to avoid form submition
 			event.preventDefault();
 		});
+		GuestController.setFocus();
+	},
+	
+	setFocus: function() {
+		var inputName = document.getElementById('name');
+		inputName.focus();
+	},
+	
+	clearForm: function() {
+		var form = document.querySelector('form');
+		form.reset();
+		GuestController.setFocus();
 	},
 	
 	addGuest: function(form) {
@@ -19,8 +31,10 @@ var GuestController = {
 			name: form.name.value,
 			email: form.email.value
 		};
-		GuestService.add(guest);
-		GuestController.addToHTML(guest);
+		GuestService.add(guest, function(addedGuest) {
+			GuestController.addToHTML(addedGuest);
+			GuestController.clearForm();
+		});
 	},
 	
 	showList: function () {

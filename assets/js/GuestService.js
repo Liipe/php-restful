@@ -2,9 +2,20 @@ var GuestService = {
 
 	list: [],
 	
-	add: function(guest) {
-		GuestService.list.push(guest);
-		GuestService.saveToLocalStorage();
+	add: function(guest, callback) {
+		$.ajax({
+			type: 'POST',
+			contentType: 'application/json',
+			url: 'api/guest',
+			data: JSON.stringify(guest),
+			success: function(addedGuest) {
+				console.log('Guest created!');
+				callback(addedGuest);
+			},
+			error: function() {
+				console.log('Error to add guest ' + guest.name);
+			}
+		});
 	},
 	
 	remove: function(guest) {
