@@ -86,7 +86,7 @@ var GuestController = {
 	createDT: function(guest) {
 		var 
 			dt = document.createElement('dt'),
-			img = GuestController.createImage('http://www.gravatar.com/avatar/hash-md5');
+			img = GuestController.createImage('http://www.gravatar.com/avatar/' + md5(guest.email));
 		
 		dt.appendChild(img);
 		dt.className = "photo";
