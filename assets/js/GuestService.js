@@ -18,8 +18,19 @@ var GuestService = {
 		});
 	},
 	
-	remove: function(guest) {
-		//TODO to implemented
+	remove: function(id, callback) {
+		$.ajax({
+			type: 'DELETE',
+			url: 'api/guest/' + id,
+			success: function(response) {
+				console.log('Guest deleted!');
+				callback(true);
+			},
+			error: function(jqXHR) {
+				console.log('Error to delete guest with id ' + id);
+				callback(false);
+			}
+		});
 	},
 	
 	getList: function(callback) {

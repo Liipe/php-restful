@@ -37,6 +37,20 @@ var GuestController = {
 		});
 	},
 	
+	deleteGuest: function(imgDelete) {
+		var 
+			guestName = imgDelete.dataset.guestname,
+			guestId = imgDelete.dataset.guestid;
+		
+		if(confirm('Are you sure to delete ' + guestName + '?')) {
+			GuestService.remove(guestId, function(isDeleted) {
+				if(isDeleted) {
+					$(imgDelete).parents('dl').remove();
+				}
+			})
+		}
+	},
+	
 	showList: function () {
 		GuestService.getList(function(list) {
 			list.forEach(function(guest) {
@@ -51,7 +65,10 @@ var GuestController = {
 			dl = document.createElement('dl'),
 			dt = GuestController.createDT(guest),
 			ddName = GuestController.createDD(guest.name, 'name'),
+			imgDelete = GuestController.createDelete(guest),
 			ddEmail = GuestController.createDD(guest.email, 'email');
+		
+		ddName.appendChild(imgDelete);
 		
 		dl.appendChild(dt);
 		dl.appendChild(ddName);
@@ -84,9 +101,23 @@ var GuestController = {
 		dd.className = className;
 		
 		return dd;
+	},
+	
+	createDelete: function(guest) {
+		var imgDelete = GuestController.createImage('assets/images/delete.gif');
+		
+		imgDelete.setAttribute('data-guestid', guest.id);
+		imgDelete.setAttribute('data-guestname', guest.name);
+		
+		imgDelete.addEventListener('click', function() {
+			GuestController.deleteGuest(this);
+		});
+		
+		return imgDelete;
 	}
 
 };
 
+//TODO consider to have an HTMLService.js
 //initialization
 GuestController.init();
